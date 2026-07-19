@@ -1,4 +1,5 @@
 import type { JSX } from 'react';
+import { useState } from 'react';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './my-skills.module.css';
 
@@ -11,6 +12,8 @@ interface Skill {
 interface SkillCardProps {
   skill: Skill;
 }
+
+const SKILLS_PER_PAGE = 3;
 
 function SkillCard({ skill }: SkillCardProps): JSX.Element {
   return (
@@ -46,6 +49,8 @@ function SkillCard({ skill }: SkillCardProps): JSX.Element {
 }
 
 export default function MySkills(): JSX.Element {
+  const [currentPage, setCurrentPage] = useState(0);
+
   const securityIcon = useBaseUrl('/icons/security.svg');
   const systemAdministrationIcon = useBaseUrl(
     '/icons/systemadministration.svg',
@@ -151,6 +156,13 @@ export default function MySkills(): JSX.Element {
     },
   ];
 
+  const pageCount = Math.ceil(skills.length / SKILLS_PER_PAGE);
+
+  const visibleMobileSkills = skills.slice(
+    currentPage * SKILLS_PER_PAGE,
+    currentPage * SKILLS_PER_PAGE + SKILLS_PER_PAGE,
+  );
+
   return (
     <section id="my-skills" className={styles.section}>
       <div className={styles.wrap}>
@@ -162,9 +174,36 @@ export default function MySkills(): JSX.Element {
           </p>
         </header>
 
-        <div className={styles.grid}>
+        <div className={`${styles.grid} ${styles.desktopGrid}`}>
           {skills.map((skill) => (
             <SkillCard key={skill.label} skill={skill} />
+          ))}
+        </div>
+
+        <div className={`${styles.grid} ${styles.mobileGrid}`}>
+          {visibleMobileSkills.map((skill) => (
+            <SkillCard key={skill.label} skill={skill} />
+          ))}
+        </div>
+
+        <div
+          className={styles.pagination}
+          role="group"
+          aria-label="Skills pagination"
+        >
+          {Array.from({ length: pageCount }, (_, pageIndex) => (
+            <button
+              key={pageIndex}
+              type="button"
+              className={`${styles.paginationDot} ${
+                currentPage === pageIndex
+                  ? styles.paginationDotActive
+                  : ''
+              }`}
+              aria-label={`Show skills page ${pageIndex + 1}`}
+              aria-pressed={currentPage === pageIndex}
+              onClick={() => setCurrentPage(pageIndex)}
+            />
           ))}
         </div>
       </div>

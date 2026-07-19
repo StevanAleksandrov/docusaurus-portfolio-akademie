@@ -428,4 +428,43 @@
   .secondaryButton {
     width: 100%;
   }
+    .mobileToggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    margin: 0 auto;
+    padding: 0;
+    color: #ffffff;
+    background: transparent;
+    border: 1px solid rgb(255 255 255 / 75%);
+    border-radius: 50%;
+    cursor: pointer;
+    transition:
+      background-color 160ms ease,
+      transform 160ms ease;
+  }
+
+  .mobileToggle:hover {
+    color: #266ad9;
+    background-color: #ffffff;
+  }
+
+  .mobileToggle:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 5px;
+  }
+
+  .mobileToggleArrow {
+    display: block;
+    font-size: 34px;
+    line-height: 1;
+    transform: translateY(-4px);
+    transition: transform 180ms ease;
+  }
+
+  .mobileToggleOpen .mobileToggleArrow {
+    transform: translateY(4px) rotate(180deg);
+  }
 }

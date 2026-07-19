@@ -84,6 +84,9 @@ function ProjectCard({ project }: ProjectCardProps): JSX.Element {
 }
 
 export default function ProjectHighlights(): JSX.Element {
+  const [showAllMobileProjects, setShowAllMobileProjects] =
+    useState(false);
+
   const securityIcon = useBaseUrl('/icons/security.svg');
   const systemAdministrationIcon = useBaseUrl(
     '/icons/systemadministration.svg',
@@ -263,11 +266,12 @@ export default function ProjectHighlights(): JSX.Element {
     projects.find((project) => project.id === activeProjectId) ??
     projects[0];
 
+  const visibleMobileProjects = showAllMobileProjects
+    ? projects
+    : projects.slice(0, 3);
+
   return (
-    <section
-      id="project-highlights"
-      className={styles.section}
-    >
+    <section id="project-highlights" className={styles.section}>
       <div className={styles.wrapper}>
         <h2 className={styles.title}>My project highlights</h2>
 
@@ -278,8 +282,7 @@ export default function ProjectHighlights(): JSX.Element {
           >
             <div className={styles.projectList}>
               {projects.map((project, index) => {
-                const isActive =
-                  project.id === activeProjectId;
+                const isActive = project.id === activeProjectId;
 
                 return (
                   <button
@@ -289,9 +292,7 @@ export default function ProjectHighlights(): JSX.Element {
                       isActive ? styles.activeProjectButton : ''
                     }`}
                     aria-pressed={isActive}
-                    onClick={() =>
-                      setActiveProjectId(project.id)
-                    }
+                    onClick={() => setActiveProjectId(project.id)}
                   >
                     <span className={styles.projectNumber}>
                       {index + 1}.
@@ -317,7 +318,7 @@ export default function ProjectHighlights(): JSX.Element {
         </div>
 
         <div className={styles.mobileLayout}>
-          {projects.map((project, index) => (
+          {visibleMobileProjects.map((project, index) => (
             <div
               key={project.id}
               className={styles.mobileProject}
@@ -330,6 +331,26 @@ export default function ProjectHighlights(): JSX.Element {
               <ProjectCard project={project} />
             </div>
           ))}
+
+          <button
+            type="button"
+            className={`${styles.mobileToggle} ${
+              showAllMobileProjects
+                ? styles.mobileToggleOpen
+                : ''
+            }`}
+            aria-expanded={showAllMobileProjects}
+            aria-label={
+              showAllMobileProjects
+                ? 'Show fewer projects'
+                : 'Show all projects'
+            }
+            onClick={() =>
+              setShowAllMobileProjects((current) => !current)
+            }
+          >
+            <span className={styles.mobileToggleArrow}>⌄</span>
+          </button>
         </div>
       </div>
     </section>
