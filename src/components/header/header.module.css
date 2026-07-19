@@ -1,11 +1,25 @@
 .header {
-  position: sticky;
+  position: fixed;
   top: 0;
+  right: 0;
+  left: 0;
   z-index: 1000;
+  width: 100%;
   padding: 0 48px;
   color: #ffffff;
   background-color: #266ad9;
   box-shadow: 0 2px 12px rgb(0 0 0 / 12%);
+  transform: translateY(0);
+  transition: transform 220ms ease;
+  will-change: transform;
+}
+
+.headerHidden {
+  transform: translateY(-100%);
+}
+
+.headerOffset {
+  height: 40px;
 }
 
 .inner {
@@ -69,7 +83,8 @@
 }
 
 .activeLink {
-  color: #262e34;
+  color: #ffffff;
+  font-weight: 600;
 }
 
 .mobileBrand,
@@ -86,11 +101,13 @@
 
 @media (max-width: 768px) {
   .header {
+    min-height: 64px;
     padding: 0 24px;
   }
 
+
   .inner {
-    justify-content: space-between;
+    justify-content: flex-end;
     min-height: 64px;
   }
 
@@ -99,17 +116,7 @@
   }
 
   .mobileBrand {
-    display: inline-block;
-    color: #ffffff;
-    font-family: 'Quicksand', sans-serif;
-    font-size: 18px;
-    font-weight: 700;
-    text-decoration: none;
-  }
-
-  .mobileBrand:hover {
-    color: #ffffff;
-    text-decoration: none;
+   display: none;
   }
 
   .menuToggle {
@@ -175,7 +182,7 @@
     transform: translateX(0);
   }
 
-  .closeButton {
+    .closeButton {
     position: absolute;
     top: 18px;
     right: 24px;
@@ -228,7 +235,8 @@
   }
 
   .mobileActiveLink {
-    color: #262e34;
+    color: #266ad9;
+    font-weight: 600;
     text-decoration: underline;
     text-underline-offset: 6px;
   }

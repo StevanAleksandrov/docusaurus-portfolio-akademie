@@ -1,5 +1,5 @@
 import type { JSX, MouseEvent } from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from '@docusaurus/Link';
 import styles from './header.module.css';
 
@@ -18,10 +18,29 @@ const sectionLinks: SectionLink[] = [
 export default function Header(): JSX.Element {
   const [activeId, setActiveId] = useState('hero');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+
+  const lastScrollY = useRef(0);
+  const isMenuOpenRef = useRef(false);
 
   useEffect(() => {
-    const updateActiveSection = (): void => {
-      const scrollPosition = window.scrollY + 140;
+    isMenuOpenRef.current = isMenuOpen;
+
+    if (isMenuOpen) {
+      setIsHeaderVisible(true);
+    }
+  }, [isMenuOpen]);
+
+  useEffect(() => {
+    let ticking = false;
+
+    const updatePageState = (): void => {
+      const currentScrollY = Math.max(window.scrollY, 0);
+      const previousScrollY = lastScrollY.current;
+
+      const headerHeight = window.innerWidth <= 768 ? 64 : 80;
+      const scrollPosition = currentScrollY + headerHeight + 40;
+
       let currentSection = sectionLinks[0].id;
 
       sectionLinks.forEach(({ id }) => {
@@ -33,19 +52,42 @@ export default function Header(): JSX.Element {
       });
 
       setActiveId(currentSection);
+
+      if (isMenuOpenRef.current || currentScrollY <= 10) {
+        setIsHeaderVisible(true);
+      } else if (currentScrollY < previousScrollY) {
+        setIsHeaderVisible(true);
+      } else if (currentScrollY > previousScrollY) {
+        setIsHeaderVisible(false);
+      }
+
+      lastScrollY.current = currentScrollY;
+      ticking = false;
     };
 
-    updateActiveSection();
+    const handleScroll = (): void => {
+      if (!ticking) {
+        window.requestAnimationFrame(updatePageState);
+        ticking = true;
+      }
+    };
 
-    window.addEventListener('scroll', updateActiveSection, {
+    const handleResize = (): void => {
+      handleScroll();
+    };
+
+    lastScrollY.current = Math.max(window.scrollY, 0);
+    updatePageState();
+
+    window.addEventListener('scroll', handleScroll, {
       passive: true,
     });
 
-    window.addEventListener('resize', updateActiveSection);
+    window.addEventListener('resize', handleResize);
 
     return () => {
-      window.removeEventListener('scroll', updateActiveSection);
-      window.removeEventListener('resize', updateActiveSection);
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
@@ -55,7 +97,6 @@ export default function Header(): JSX.Element {
     }
 
     const previousOverflow = document.body.style.overflow;
-
     document.body.style.overflow = 'hidden';
 
     const closeOnEscape = (event: KeyboardEvent): void => {
@@ -83,24 +124,30 @@ export default function Header(): JSX.Element {
         return;
       }
 
-      const headerOffset = 80;
+      const headerOffset = window.innerWidth <= 768 ? 64 : 80;
+
       const targetPosition =
         target.getBoundingClientRect().top +
         window.scrollY -
         headerOffset;
 
+      setActiveId(id);
+      setIsMenuOpen(false);
+      setIsHeaderVisible(true);
+
       window.scrollTo({
         top: targetPosition,
         behavior: 'smooth',
       });
-
-      setActiveId(id);
-      setIsMenuOpen(false);
     };
 
   return (
     <>
-      <header className={styles.header}>
+      <header
+        className={`${styles.header} ${
+          isHeaderVisible ? '' : styles.headerHidden
+        }`}
+      >
         <div className={styles.inner}>
           <a
             href="#hero"
@@ -150,6 +197,8 @@ export default function Header(): JSX.Element {
         </div>
       </header>
 
+      <div className={styles.headerOffset} aria-hidden="true" />
+
       <div
         id="mobile-navigation"
         className={`${styles.mobileMenu} ${
@@ -183,6 +232,7 @@ export default function Header(): JSX.Element {
                   className={`${styles.mobileLink} ${
                     activeId === id ? styles.mobileActiveLink : ''
                   }`}
+                  aria-current={activeId === id ? 'page' : undefined}
                 >
                   {label}
                 </a>
