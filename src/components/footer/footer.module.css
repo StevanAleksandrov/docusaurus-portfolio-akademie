@@ -70,6 +70,28 @@
   line-height: 1.2;
   color: #cbd5df;
 }
+.legalLink {
+  display: inline-block;
+  margin-top: 12px;
+  color: #cbd5df;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.2;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.legalLink:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.legalLink:focus-visible {
+  border-radius: 2px;
+  outline: 2px solid #ffffff;
+  outline-offset: 4px;
+}
 
 @media (max-width: 768px) {
   .footer {
@@ -92,4 +114,8 @@
   .description {
     font-size: 13px;
   }
+  .legalLink {
+  font-size: 13px;
+}
+
 }

@@ -1,4 +1,5 @@
 import type { JSX, MouseEvent } from 'react';
+import Link from '@docusaurus/Link';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './footer.module.css';
 
@@ -52,13 +53,12 @@ export default function Footer(): JSX.Element {
           />
         </a>
 
-        <p className={styles.copy}>
-          © Stevan Aleksandrov {year}
-        </p>
+        <p className={styles.copy}>© Stevan Aleksandrov {year}</p>
 
-        <p className={styles.description}>
-          Built with Docusaurus
-        </p>
+
+        <Link className={styles.legalLink} to="/legal-notice">
+          Legal Notice
+        </Link>
       </div>
     </footer>
   );
