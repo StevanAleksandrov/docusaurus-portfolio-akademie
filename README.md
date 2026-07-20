@@ -1,22 +1,110 @@
-# Website
+# Docusaurus Portfolio
 
-This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
+This repository contains my personal portfolio website built with Docusaurus and TypeScript.
 
-## Installation
+The website presents my professional background, technical skills, selected projects, and project documentation in the areas of Linux, Docker, Kubernetes, DevSecOps, CI/CD, IT infrastructure, and security.
+
+The homepage is built from reusable React components combined in `src/pages/index.tsx`. The repository also includes a Docusaurus documentation area with technical documentation for completed Akademie projects.
+
+## Table of Contents
+
+- [Project Structure](#project-structure)
+- [Prerequisites](#prerequisites)
+- [Quickstart](#quickstart)
+- [Usage](#usage)
+- [Build](#build)
+- [Deployment](#deployment)
+- [Live Website](#live-website)
+
+## Project Structure
+
+```text
+.
+├── .github/
+│   └── workflows/
+├── docs/
+│   └── projects/
+├── src/
+│   ├── components/
+│   │   ├── contact/
+│   │   ├── footer/
+│   │   ├── header/
+│   │   ├── hero/
+│   │   ├── my-skills/
+│   │   └── project-highlights/
+│   ├── css/
+│   │   └── custom.css
+│   └── pages/
+│       └── index.tsx
+├── static/
+│   └── img/
+├── docusaurus.config.ts
+├── package.json
+├── sidebars.ts
+└── tsconfig.json
+```
+
+## Prerequisites
+
+- Node.js 18+
+- npm
+- Git
+
+## Quickstart
+
+Clone the repository, install dependencies, and start the development server:
 
 ```bash
+git clone https://github.com/StevanAleksandrov/docusaurus-portfolio-akademie.git
+cd docusaurus-portfolio-akademie
 npm install
+npm start
 ```
 
-**Note**: feel free to use the package manager of your choice.
+The local website is available at `http://localhost:3000`.
 
-## Local Development
+### How to Start
+
+Docusaurus supports hot reload — saved changes are reflected automatically in the browser.
+
+To run a TypeScript check before building:
 
 ```bash
-npm run start
+npx tsc --noEmit
 ```
 
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
+## Usage
+
+### Site Configuration
+
+Global configuration is managed in `docusaurus.config.ts`. Key settings include:
+
+- `title`, `tagline`, and `favicon` — basic site identity
+- `url`, `baseUrl`, `organizationName`, and `projectName` — GitHub Pages deployment settings
+- `themeConfig.navbar` and `themeConfig.footer` — navigation and footer configuration
+
+Current deployment values:
+
+```ts
+url: 'https://stevanaleksandrov.github.io',
+baseUrl: '/docusaurus-portfolio-akademie/',
+organizationName: 'StevanAleksandrov',
+projectName: 'docusaurus-portfolio-akademie',
+```
+
+### Homepage Components
+
+Each homepage section is a separate React component in `src/components/`. Components are imported and combined in `src/pages/index.tsx`.
+
+To add a new section:
+
+1. Create a kebab-case folder inside `src/components/`
+2. Add `index.tsx` and a CSS Module if needed
+3. Import and place the component in `src/pages/index.tsx`
+
+### Project Documentation
+
+Documentation is stored in `docs/projects/` and includes eight completed projects. The sidebar is configured in `sidebars.ts`.
 
 ## Build
 
@@ -24,20 +112,22 @@ This command starts a local development server and opens up a browser window. Mo
 npm run build
 ```
 
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
+Generated files are stored in `build/`. To preview locally:
+
+```bash
+npm run serve
+```
 
 ## Deployment
 
-Using SSH:
+The portfolio deploys automatically to GitHub Pages via GitHub Actions on every push to `main`.
 
-```bash
-USE_SSH=true npm run deploy
-```
+GitHub Pages setup:
 
-Not using SSH:
+1. Open **Settings → Pages**
+2. Set source to **GitHub Actions**
+3. Push to `main` and verify the workflow in the **Actions** tab
 
-```bash
-GIT_USER=<Your GitHub username> npm run deploy
-```
+## Live Website
 
-If you are using GitHub Pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+[https://stevanaleksandrov.github.io/docusaurus-portfolio-akademie/](https://stevanaleksandrov.github.io/docusaurus-portfolio-akademie/)
